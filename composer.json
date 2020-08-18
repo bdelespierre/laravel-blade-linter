@@ -1,0 +1,54 @@
+{
+    "name": "bdelespierre/laravel-blade-linter",
+    "description": "A simple Blade template syntax checker for Laravel",
+    "keywords": [
+        "bdelespierre",
+        "laravel-blade-linter"
+    ],
+    "homepage": "https://github.com/bdelespierre/laravel-blade-linter",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Benjamin Delespierre",
+            "email": "benjamin.delespierre@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "^7.25"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.4",
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bdelespierre\\LaravelBladeLinter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bdelespierre\\LaravelBladeLinter\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bdelespierre\\LaravelBladeLinter\\BladeLinterServiceProvider"
+            ],
+            "aliases": {
+                "LaravelBladeLinter": "Bdelespierre\\LaravelBladeLinter\\BladeLinterFacade"
+            }
+        }
+    }
+}

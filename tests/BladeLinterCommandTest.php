@@ -25,7 +25,7 @@ class BladeLinterCommandTest extends TestCase
     public function testValidBladeFilePass()
     {
         $path = __DIR__ . '/views/valid.blade.php';
-        $exit = Artisan::call('blade:lint', compact('path'));
+        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
 
         $this->assertEquals(
             0,
@@ -43,7 +43,7 @@ class BladeLinterCommandTest extends TestCase
     public function testInvalidBladeFilePass()
     {
         $path = __DIR__ . '/views/invalid.blade.php';
-        $exit = Artisan::call('blade:lint', compact('path'));
+        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
 
         $this->assertEquals(
             1,
@@ -60,7 +60,7 @@ class BladeLinterCommandTest extends TestCase
 
     public function testWithoutPath()
     {
-        $exit = Artisan::call('blade:lint');
+        $exit = Artisan::call('blade:lint', ['-v' => true]);
 
         $this->assertEquals(
             1,
@@ -82,7 +82,7 @@ class BladeLinterCommandTest extends TestCase
             __DIR__ . '/views/invalid.blade.php',
         ];
 
-        $exit = Artisan::call('blade:lint', compact('path'));
+        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
 
         $this->assertEquals(
             1,

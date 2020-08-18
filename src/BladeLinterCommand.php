@@ -56,7 +56,10 @@ class BladeLinterCommand extends Command
             return false;
         }
 
-        $this->line("No syntax errors detected in {$file->getPathname()}");
+        if ($this->getOutput()->isVerbose()) {
+            $this->line("No syntax errors detected in {$file->getPathname()}");
+        }
+
         return true;
     }
 

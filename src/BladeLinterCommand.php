@@ -6,11 +6,12 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class BladeLinterCommand extends Command
 {
+    public const SUCCESS = 0;
+    public const FAILURE = 1;
+
     protected $signature = 'blade:lint {path?*}';
 
     protected $description = 'Checks Blade template syntax';
@@ -19,11 +20,11 @@ class BladeLinterCommand extends Command
     {
         foreach ($this->getBladeFiles() as $file) {
             if (! $this->checkFile($file)) {
-                $status = 1;
+                $status = self::FAILURE;
             }
         }
 
-        return $status ?? 0;
+        return $status ?? self::SUCCESS;
     }
 
     protected function getBladeFiles(): \Generator

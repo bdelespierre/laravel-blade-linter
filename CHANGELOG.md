@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-blade-linter` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## 1.4.0 - 2021-04-13
+
+- phpstan support through --phpstan=vendor/bin/phpstan option
+
+## 1.3.0 - 2021-03-11
+
+- PHP8 support
+
+## 1.2.0 - 2020-11-26
+
+- refactoring
+
+## 1.1.0 - 2020-08-18
+
+- bugfixes
+
+## 1.0.0
 
 - initial release

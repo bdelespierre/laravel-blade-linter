@@ -27,6 +27,12 @@ Or if you want to lint specific templates or directories:
 php artisan blade:lint resources/views/
 ```
 
+If you're using [PHPStan](https://phpstan.org/) (please note it will make the linting a lot slower):
+
+```bash
+php artisan blade:lint --phpstan=vendor/bin/phpstan resources/views
+```
+
 ### Testing
 
 ``` bash

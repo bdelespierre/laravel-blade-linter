@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Config;
 
 class BladeLinterCommand extends Command
 {
-    public const SUCCESS = 0;
-    public const FAILURE = 1;
-
-    protected $signature = 'blade:lint {path?*}';
+    protected $signature = 'blade:lint {--phpstan=} {path?*}';
 
     protected $description = 'Checks Blade template syntax';
 
@@ -57,6 +54,13 @@ class BladeLinterCommand extends Command
             return false;
         }
 
+        if ($this->option('phpstan') && $errors = $this->analyse($compiled)) {
+            foreach ($errors as $error) {
+                $this->error("PHPStan error:  {$error->message} in {$file->getPathname()} on line {$error->line}");
+            }
+            return false;
+        }
+
         if ($this->getOutput()->isVerbose()) {
             $this->line("No syntax errors detected in {$file->getPathname()}");
         }
@@ -89,10 +93,57 @@ class BladeLinterCommand extends Command
         fclose($pipes[2]);
 
         // it is important that you close any pipes before calling
-        // +proc_close in order to avoid a deadlock
+        // proc_close in order to avoid a deadlock
         $retval = proc_close($process);
 
         // zero actually means "no error"
         return $retval == "0";
+    }
+
+    protected function analyse(string $code): array
+    {
+        // write to a temporary file
+        // (phpstan doesn't support stdin)
+        $path = tempnam(sys_get_temp_dir(), 'laravel-blade-linter');
+
+        if (! file_put_contents($path, $code)) {
+            throw new \RuntimeException("unable to write to {$path}");
+        }
+
+        try {
+            return $this->analyseFile($path);
+        } finally {
+            unlink($path);
+        }
+    }
+
+    protected function analyseFile(string $path): array
+    {
+        $errors = [];
+
+        $phpstan = $this->option('phpstan');
+
+        if (! is_executable($phpstan)) {
+            throw new \RuntimeException("unable to run {$phpstan}");
+        }
+
+        ob_start(); // shell_exec echoes stderr...
+        $output = `{$phpstan} analyse --error-format json --no-ansi --no-progress -- {$path} 2>/dev/null`;
+        $stderr = ob_get_clean();
+
+        $json = json_decode($output);
+
+        if (! $json instanceof \stdClass) {
+            throw new \RuntimeException("unable to parse PHPStan output");
+        }
+
+        foreach ($json->files as $filename => $descriptor) {
+            foreach ($descriptor->messages as $message) {
+                $message->message = rtrim(lcfirst($message->message), '.');
+                $errors[] = $message;
+            }
+        }
+
+        return $errors;
     }
 }

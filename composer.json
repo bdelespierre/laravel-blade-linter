@@ -21,22 +21,14 @@
     },
     "require-dev": {
         "orchestra/testbench": "^6.4",
+        "phpstan/phpstan": "^0.12.83",
         "phpunit/phpunit": "^9.3"
     },
     "autoload": {
         "psr-4": {
-            "Bdelespierre\\LaravelBladeLinter\\": "src"
+            "Bdelespierre\\LaravelBladeLinter\\": "src",
+            "Tests\\": "tests/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Bdelespierre\\LaravelBladeLinter\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
     "config": {
         "sort-packages": true
@@ -50,5 +42,18 @@
                 "LaravelBladeLinter": "Bdelespierre\\LaravelBladeLinter\\BladeLinterFacade"
             }
         }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit --color=always"
+        ],
+        "test:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --color=always --coverage-clover=\"build/coverage/clover.xml\""
+        ],
+        "test:coverage-html": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --color=always --coverage-html=\"build/coverage\""
+        ]
     }
 }

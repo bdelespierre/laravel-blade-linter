@@ -1,6 +1,6 @@
 <?php
 
-namespace Bdelespierre\LaravelBladeLinter\Tests;
+namespace Tests;
 
 use Bdelespierre\LaravelBladeLinter\BladeLinterServiceProvider;
 use Illuminate\Support\Facades\Artisan;
@@ -68,10 +68,21 @@ class BladeLinterCommandTest extends TestCase
             "Validating an invalid template should exit with a 'NOK' status"
         );
 
-        $this->assertStringStartsWith(
-            "PHP Parse error:  syntax error",
-            trim(Artisan::output()),
-            "Syntax error should be displayed"
+        $output = Artisan::output();
+
+        $this->assertMatchesRegularExpression(
+            "~No syntax errors detected in .*/tests/views/invalid-phpstan\\.blade\\.php\n~",
+            $output,
+        );
+
+        $this->assertMatchesRegularExpression(
+            "~PHP Parse error:  syntax error, unexpected '\\)' in .*/tests/views/invalid\\.blade\\.php on line 1\n~",
+            $output,
+        );
+
+        $this->assertMatchesRegularExpression(
+            "~No syntax errors detected in .*/tests/views/valid\\.blade\\.php\n~",
+            $output,
         );
     }
 
@@ -103,5 +114,43 @@ class BladeLinterCommandTest extends TestCase
             $output,
             "Syntax error should be displayed"
         );
+    }
+
+    public function testWithPhpStan()
+    {
+        $path = [
+            __DIR__ . '/views/invalid-phpstan.blade.php',
+        ];
+
+        $exit = Artisan::call('blade:lint', [
+            '--phpstan' => 'vendor/bin/phpstan',
+            'path' => $path,
+        ]);
+
+        $this->assertEquals(
+            1,
+            $exit,
+            "Validating an invalid template for PHPStan should exit with a 'NOK' status"
+        );
+
+        $this->assertMatchesRegularExpression(
+            "~PHPStan error:  access to constant SOME_CONSTANT on an unknown class SomeClass " .
+            "in .*/tests/views/invalid-phpstan\\.blade\\.php on line 4\n~",
+            Artisan::output(),
+        );
+    }
+
+    public function testInvalidPHPStan()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $path = [
+            __DIR__ . '/views/invalid-phpstan.blade.php',
+        ];
+
+        $exit = Artisan::call('blade:lint', [
+            '--phpstan' => 'invalid/path/to/phpstan',
+            'path' => $path,
+        ]);
     }
 }

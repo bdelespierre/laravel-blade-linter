@@ -24,6 +24,9 @@
         "phpstan/phpstan": "^0.12.83",
         "phpunit/phpunit": "^9.3"
     },
+    "bin": [
+        "bin/blade-linter"
+    ],
     "autoload": {
         "psr-4": {
             "Bdelespierre\\LaravelBladeLinter\\": "src",

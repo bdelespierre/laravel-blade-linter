@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Bdelespierre\LaravelBladeLinter\BladeLinterCommand;
+use Illuminate\Config\Repository as Config;
+use Illuminate\Container\Container;
+use Illuminate\Filesystem\FilesystemServiceProvider;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\View\ViewServiceProvider;
+use Symfony\Component\Console\Application;
+
+// create an empty container
+$laravel = new Container();
+
+$laravel['config'] = fn() => new Config([
+    // use current directory as view path
+    'view.paths' => getcwd(),
+
+    // send compiled views to /tmp
+    'view.compiled' => sys_get_temp_dir(),
+]);
+
+// register services
+(new FilesystemServiceProvider($laravel))->register();
+(new ViewServiceProvider($laravel))->register();
+
+// set the container so the Config::get calls resolve
+Facade::setFacadeApplication($laravel);
+
+// prepare the command
+$command = new BladeLinterCommand();
+$command->setLaravel($laravel);
+$command->setName('lint');
+
+// create the Symfony console application
+$application = new Application();
+$application->add($command);
+$application->run();

@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-blade-linter` will be documented in this file
 
+## 1.5.0 - 2021-04-16
+
+- standalone phar
+
 ## 1.4.0 - 2021-04-13
 
 - phpstan support through --phpstan=vendor/bin/phpstan option

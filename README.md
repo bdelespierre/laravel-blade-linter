@@ -39,6 +39,19 @@ php artisan blade:lint --phpstan=vendor/bin/phpstan resources/views
 composer test
 ```
 
+### Building standalone phar
+
+```bash
+# download clue/phar-composer
+composer global require clue/phar-composer
+
+# build the project
+phar-composer build ./
+
+# using the phar
+laravel-blade-linter.phar help
+```
+
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

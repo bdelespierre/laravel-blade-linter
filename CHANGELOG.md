@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-blade-linter` will be documented in this file
 
+## 1.6.0 - 2021-04-22
+
+- removing standalone phar from master
+- adding the phar archive on GitHub releases
+
 ## 1.5.0 - 2021-04-16
 
 - standalone phar

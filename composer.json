@@ -57,6 +57,9 @@
         "test:coverage-html": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit --color=always --coverage-html=\"build/coverage\""
+        ],
+        "build": [
+            "rm -rfv vendor/ *.phar && composer install --no-dev && phar-composer build ./"
         ]
     }
 }

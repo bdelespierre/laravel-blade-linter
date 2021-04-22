@@ -42,11 +42,12 @@ composer test
 ### Building standalone phar
 
 ```bash
-# download clue/phar-composer
+# install clue/phar-composer globally (you'll need to update your $PATH,
+# see https://getcomposer.org/doc/03-cli.md#global)
 composer global require clue/phar-composer
 
 # build the project
-phar-composer build ./
+composer run build
 
 # using the phar
 laravel-blade-linter.phar help

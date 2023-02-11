@@ -25,16 +25,24 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+
       php = pkgs.php80.buildEnv {
         extraConfig = ''
           memory_limit=2G
         '';
+        extensions = {
+          enabled,
+          all,
+        }:
+          enabled ++ [all.ast];
       };
+
       phpWithPcov = php.withExtensions ({
         enabled,
         all,
       }:
         enabled ++ [all.pcov]);
+
       src = gitignore.lib.gitignoreSource ./.;
 
       pre-commit-check = pre-commit-hooks.lib.${system}.run {

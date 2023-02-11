@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Config;
 
 final class BladeLinterCommand extends Command
 {
-    protected $signature = 'blade:lint {path?*}';
+    protected $signature = 'blade:lint'
+        . ' {--backend=auto : One of: auto, cli, ext-ast}'
+        . ' {path?*}';
 
     protected $description = 'Checks Blade template syntax';
 
@@ -68,7 +70,19 @@ final class BladeLinterCommand extends Command
         // compile the file and send it to the linter process
         $compiled = Blade::compileString($code);
 
-        $backends = [new Backend\Cli()];
+        $backends = [];
+
+        switch ($this->option('backend')) {
+            default:
+            case 'auto':
+            case 'cli':
+                $backends[] = new Backend\Cli();
+                break;
+
+            case 'ext-ast':
+                $backends[] = new Backend\ExtAst();
+                break;
+        }
 
         $errors = [];
 

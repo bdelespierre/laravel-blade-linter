@@ -31,10 +31,13 @@ class BladeLinterCommandTest extends TestCase
         ]);
     }
 
-    public function testValidBladeFilePass(): void
+    /**
+     * @dataProvider backendProvider
+     */
+    public function testValidBladeFilePass(string $backend): void
     {
         $path = __DIR__ . '/views/valid.blade.php';
-        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
 
         $this->assertEquals(
             0,
@@ -49,10 +52,13 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testInvalidBladeFilePass(): void
+    /**
+     * @dataProvider backendProvider
+     */
+    public function testInvalidBladeFilePass(string $backend): void
     {
         $path = __DIR__ . '/views/invalid.blade.php';
-        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
 
         $this->assertEquals(
             1,
@@ -67,9 +73,12 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testWithoutPath(): void
+    /**
+     * @dataProvider backendProvider
+     */
+    public function testWithoutPath(string $backend): void
     {
-        $exit = Artisan::call('blade:lint', ['-v' => true]);
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend]);
 
         $this->assertEquals(
             1,
@@ -95,14 +104,17 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testWithMultiplePaths(): void
+    /**
+     * @dataProvider backendProvider
+     */
+    public function testWithMultiplePaths(string $backend): void
     {
         $path = [
             __DIR__ . '/views/valid.blade.php',
             __DIR__ . '/views/invalid.blade.php',
         ];
 
-        $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
 
         $this->assertEquals(
             1,
@@ -123,5 +135,14 @@ class BladeLinterCommandTest extends TestCase
             $output,
             "Syntax error should be displayed"
         );
+    }
+
+    public function backendProvider(): array
+    {
+        return [
+            ['auto'],
+            ['cli'],
+            ['ext-ast'],
+        ];
     }
 }

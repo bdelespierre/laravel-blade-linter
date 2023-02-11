@@ -12,7 +12,7 @@ use PhpParser\ParserFactory;
 final class BladeLinterCommand extends Command
 {
     protected $signature = 'blade:lint'
-        . ' {--backend=auto : One of: auto, cli, ext-ast}'
+        . ' {--backend=auto : One of: auto, cli, eval, ext-ast, php-parser}'
         . ' {--fast}'
         . ' {path?*}';
 
@@ -91,6 +91,10 @@ final class BladeLinterCommand extends Command
             case 'cli':
                 cli:
                 $backends[] = new Backend\Cli();
+                break;
+
+            case 'eval':
+                $backends[] = new Backend\Evaluate();
                 break;
 
             case 'ext-ast':

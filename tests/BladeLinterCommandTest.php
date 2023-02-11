@@ -83,12 +83,12 @@ class BladeLinterCommandTest extends TestCase
      */
     public function testInvalidExpressionBladeFilePass(string $backend): void
     {
-        $path = __DIR__ . '/views/invalid-expression.blade.php';
-        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
-
         if ($backend !== 'cli') {
             $this->markTestSkipped('This currently is an E_COMPILE_ERROR in PHP and not a parse error');
         }
+
+        $path = __DIR__ . '/views/invalid-expression.blade.php';
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
 
         $this->assertEquals(
             1,
@@ -108,6 +108,10 @@ class BladeLinterCommandTest extends TestCase
      */
     public function testWithoutPath(string $backend): void
     {
+        if ($backend === 'eval') {
+            $this->markTestSkipped('This currently is an E_COMPILE_ERROR in PHP and not a parse error');
+        }
+
         $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend]);
 
         $this->assertEquals(
@@ -175,6 +179,7 @@ class BladeLinterCommandTest extends TestCase
         return [
             ['auto'],
             ['cli'],
+            ['eval'],
             ['ext-ast'],
             ['php-parser'],
         ];

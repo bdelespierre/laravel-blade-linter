@@ -1,3 +1,6 @@
+.direnv
+.idea
+.pre-commit-config.yaml
 build
 composer.lock
 docs

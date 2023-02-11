@@ -1,0 +1,15 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+parameters:
+    level: 4
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - tests/views
+    ignoreErrors:
+        - message: "#Dynamic call to static method#"
+        - message: "#Short ternary operator is not allowed#"

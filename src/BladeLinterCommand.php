@@ -47,14 +47,15 @@ class BladeLinterCommand extends Command
         // compile the file and send it to the linter process
         $compiled = Blade::compileString(file_get_contents($file));
 
-        $result = $this->lint($compiled, $output, $error);
+        $errstr = '';
+        $result = $this->lint($compiled, $output, $errstr);
 
         if (! $result) {
-            $this->error(str_replace("Standard input code", $file->getPathname(), rtrim($error)));
+            $this->error(str_replace("Standard input code", $file->getPathname(), rtrim($errstr)));
             return false;
         }
 
-        if ($this->option('phpstan') && $errors = $this->analyse($compiled)) {
+        if ($this->option('phpstan') && count($errors = $this->analyse($compiled)) > 0) {
             foreach ($errors as $error) {
                 $this->error("PHPStan error:  {$error->message} in {$file->getPathname()} on line {$error->line}");
             }
@@ -97,7 +98,7 @@ class BladeLinterCommand extends Command
         $retval = proc_close($process);
 
         // zero actually means "no error"
-        return $retval == "0";
+        return $retval === 0;
     }
 
     protected function analyse(string $code): array
@@ -128,7 +129,7 @@ class BladeLinterCommand extends Command
         }
 
         ob_start(); // shell_exec echoes stderr...
-        $output = `{$phpstan} analyse --error-format json --no-ansi --no-progress -- {$path} 2>/dev/null`;
+        $output = shell_exec("{$phpstan} analyse --error-format json --no-ansi --no-progress -- {$path} 2>/dev/null");
         $stderr = ob_get_clean();
 
         $json = json_decode($output);

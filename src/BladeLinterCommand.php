@@ -82,6 +82,10 @@ final class BladeLinterCommand extends Command
             case 'ext-ast':
                 $backends[] = new Backend\ExtAst();
                 break;
+
+            case 'php-parser':
+                $backends[] = new Backend\PhpParser();
+                break;
         }
 
         $errors = [];

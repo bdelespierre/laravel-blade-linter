@@ -20,6 +20,7 @@
         "illuminate/support": "^9.0"
     },
     "require-dev": {
+        "nikic/php-parser": "*",
         "nunomaduro/larastan": "^2.0",
         "orchestra/testbench": "^7.22.0",
         "phpstan/phpstan": "^1.9",
@@ -29,7 +30,8 @@
         "squizlabs/php_codesniffer": "^3.7"
     },
     "suggest": {
-        "ext-ast": "*"
+        "ext-ast": "*",
+        "nikic/php-parser": "*"
     },
     "bin": [
         "bin/blade-linter"

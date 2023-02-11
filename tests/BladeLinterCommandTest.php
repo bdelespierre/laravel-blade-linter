@@ -67,7 +67,7 @@ class BladeLinterCommandTest extends TestCase
         );
 
         $this->assertMatchesRegularExpression(
-            "~Parse error:  ?syntax error, unexpected .* in {$path} on line 1~",
+            "~Parse error:  ?syntax error, unexpected .* in {$path} on line 1~i",
             trim(Artisan::output()),
             "Syntax error should be displayed"
         );
@@ -89,17 +89,17 @@ class BladeLinterCommandTest extends TestCase
         $output = Artisan::output();
 
         $this->assertMatchesRegularExpression(
-            "~No syntax errors detected in .*/tests/views/invalid-phpstan\\.blade\\.php\n~",
+            "~No syntax errors detected in .*/tests/views/invalid-phpstan\\.blade\\.php\n~i",
             $output,
         );
 
         $this->assertMatchesRegularExpression(
-            "~Parse error:  ?syntax error, unexpected .* in .*/tests/views/invalid\\.blade\\.php on line 1\n~",
+            "~Parse error:  ?syntax error, unexpected .* in .*/tests/views/invalid\\.blade\\.php on line 1\n~i",
             $output,
         );
 
         $this->assertMatchesRegularExpression(
-            "~No syntax errors detected in .*/tests/views/valid\\.blade\\.php\n~",
+            "~No syntax errors detected in .*/tests/views/valid\\.blade\\.php\n~i",
             $output,
         );
     }
@@ -131,18 +131,22 @@ class BladeLinterCommandTest extends TestCase
         );
 
         $this->assertMatchesRegularExpression(
-            "~Parse error:  ?syntax error, unexpected .* in {$path[1]} on line 1~",
+            "~Parse error:  ?syntax error, unexpected .* in {$path[1]} on line 1~i",
             $output,
             "Syntax error should be displayed"
         );
     }
 
+    /**
+     * @return list<list<string>>
+     */
     public function backendProvider(): array
     {
         return [
             ['auto'],
             ['cli'],
             ['ext-ast'],
+            ['php-parser'],
         ];
     }
 }

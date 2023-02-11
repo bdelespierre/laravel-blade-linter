@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Bdelespierre\LaravelBladeLinter;
 
 use Illuminate\Support\ServiceProvider;
 
-class BladeLinterServiceProvider extends ServiceProvider
+final class BladeLinterServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {

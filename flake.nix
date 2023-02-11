@@ -25,7 +25,11 @@
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-      php = pkgs.php80;
+      php = pkgs.php80.buildEnv {
+        extraConfig = ''
+          memory_limit=2G
+        '';
+      };
       phpWithPcov = php.withExtensions ({
         enabled,
         all,

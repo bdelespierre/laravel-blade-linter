@@ -3,8 +3,9 @@ includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/nunomaduro/larastan/extension.neon
 parameters:
-    level: 4
+    level: max
     paths:
         - src
         - tests

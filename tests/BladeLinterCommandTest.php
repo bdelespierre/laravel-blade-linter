@@ -3,26 +3,34 @@
 namespace Tests;
 
 use Bdelespierre\LaravelBladeLinter\BladeLinterServiceProvider;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase;
 
 class BladeLinterCommandTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    /**
+     * @param Application $app
+     * @return list<class-string>
+     */
+    protected function getPackageProviders($app): array
     {
         return [
             BladeLinterServiceProvider::class
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
+    /**
+     * @param Application $app
+     */
+    protected function getEnvironmentSetUp($app): void
     {
         $app->make('config')->set('view.paths', [
             __DIR__ . '/views',
         ]);
     }
 
-    public function testValidBladeFilePass()
+    public function testValidBladeFilePass(): void
     {
         $path = __DIR__ . '/views/valid.blade.php';
         $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
@@ -40,7 +48,7 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testInvalidBladeFilePass()
+    public function testInvalidBladeFilePass(): void
     {
         $path = __DIR__ . '/views/invalid.blade.php';
         $exit = Artisan::call('blade:lint', ['-v' => true, 'path' => $path]);
@@ -58,7 +66,7 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testWithoutPath()
+    public function testWithoutPath(): void
     {
         $exit = Artisan::call('blade:lint', ['-v' => true]);
 
@@ -86,7 +94,7 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testWithMultiplePaths()
+    public function testWithMultiplePaths(): void
     {
         $path = [
             __DIR__ . '/views/valid.blade.php',
@@ -116,7 +124,7 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testWithPhpStan()
+    public function testWithPhpStan(): void
     {
         $path = [
             __DIR__ . '/views/invalid-phpstan.blade.php',
@@ -140,7 +148,7 @@ class BladeLinterCommandTest extends TestCase
         );
     }
 
-    public function testInvalidPHPStan()
+    public function testInvalidPHPStan(): void
     {
         $this->expectException(\RuntimeException::class);
 

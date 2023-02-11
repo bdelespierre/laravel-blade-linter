@@ -13,7 +13,7 @@ class BladeLinterCommand extends Command
 
     protected $description = 'Checks Blade template syntax';
 
-    public function handle()
+    public function handle(): int
     {
         foreach ($this->getBladeFiles() as $file) {
             if (! $this->checkFile($file)) {
@@ -24,6 +24,9 @@ class BladeLinterCommand extends Command
         return $status ?? self::SUCCESS;
     }
 
+    /**
+     * @return \Generator<\SplFileInfo>
+     */
     protected function getBladeFiles(): \Generator
     {
         $paths = Arr::wrap($this->argument('path') ?: Config::get('view.paths'));
@@ -36,16 +39,24 @@ class BladeLinterCommand extends Command
 
             $it = new \RecursiveDirectoryIterator($path);
             $it = new \RecursiveIteratorIterator($it);
+            /** @var \RegexIterator<never, \SplFileInfo, \RecursiveIteratorIterator<\RecursiveDirectoryIterator>> $it */
             $it = new \RegexIterator($it, '/\.blade\.php$/', \RegexIterator::MATCH);
 
             yield from $it;
         }
     }
 
-    protected function checkFile(\SplFileInfo $file)
+    protected function checkFile(\SplFileInfo $file): bool
     {
+        $code = file_get_contents($file);
+
+        if ($code === false) {
+            $this->error('Failed to open file ' . $file->getPathname());
+            return false;
+        }
+
         // compile the file and send it to the linter process
-        $compiled = Blade::compileString(file_get_contents($file));
+        $compiled = Blade::compileString($code);
 
         $errstr = '';
         $result = $this->lint($compiled, $output, $errstr);
@@ -55,7 +66,7 @@ class BladeLinterCommand extends Command
             return false;
         }
 
-        if ($this->option('phpstan') && count($errors = $this->analyse($compiled)) > 0) {
+        if ((bool) $this->option('phpstan') && count($errors = $this->analyse($compiled)) > 0) {
             foreach ($errors as $error) {
                 $this->error("PHPStan error:  {$error->message} in {$file->getPathname()} on line {$error->line}");
             }
@@ -101,13 +112,16 @@ class BladeLinterCommand extends Command
         return $retval === 0;
     }
 
+    /**
+     * @return list<ErrorRecord>
+     */
     protected function analyse(string $code): array
     {
         // write to a temporary file
         // (phpstan doesn't support stdin)
         $path = tempnam(sys_get_temp_dir(), 'laravel-blade-linter');
 
-        if (! file_put_contents($path, $code)) {
+        if (false === $path || false === file_put_contents($path, $code)) {
             throw new \RuntimeException("unable to write to {$path}");
         }
 
@@ -118,13 +132,20 @@ class BladeLinterCommand extends Command
         }
     }
 
+    /**
+     * @return list<ErrorRecord>
+     */
     protected function analyseFile(string $path): array
     {
         $errors = [];
 
-        $phpstan = $this->option('phpstan');
+        $phpstan = ($this->option('phpstan') ?: '');
 
-        if (! is_executable($phpstan)) {
+        if (!is_string($phpstan)) {
+            throw new \InvalidArgumentException("invalid phpstan path: " . gettype($phpstan));
+        }
+
+        if (!is_executable($phpstan)) {
             throw new \RuntimeException("unable to run {$phpstan}");
         }
 
@@ -132,7 +153,7 @@ class BladeLinterCommand extends Command
         $output = shell_exec("{$phpstan} analyse --error-format json --no-ansi --no-progress -- {$path} 2>/dev/null");
         $stderr = ob_get_clean();
 
-        $json = json_decode($output);
+        $json = json_decode((string) $output, flags: JSON_THROW_ON_ERROR);
 
         if (! $json instanceof \stdClass) {
             throw new \RuntimeException("unable to parse PHPStan output");
@@ -141,7 +162,7 @@ class BladeLinterCommand extends Command
         foreach ($json->files as $filename => $descriptor) {
             foreach ($descriptor->messages as $message) {
                 $message->message = rtrim(lcfirst($message->message), '.');
-                $errors[] = $message;
+                $errors[] = new ErrorRecord($message->message, $path, $message->line);
             }
         }
 

@@ -77,7 +77,7 @@ class BladeLinterCommand extends Command
         ];
 
         // open linter process (php -l)
-        $process = proc_open('php -l', $descriptors, $pipes);
+        $process = proc_open('php -d display_errors=stderr -l', $descriptors, $pipes);
 
         if (! is_resource($process)) {
             throw new \RuntimeException("unable to open process 'php -l'");

@@ -51,8 +51,8 @@ class BladeLinterCommandTest extends TestCase
             "Validating an invalid template should exit with a 'NOK' status"
         );
 
-        $this->assertEquals(
-            "PHP Parse error:  syntax error, unexpected ')' in {$path} on line 1",
+        $this->assertMatchesRegularExpression(
+            "~Parse error:  ?syntax error, unexpected .* in {$path} on line 1~",
             trim(Artisan::output()),
             "Syntax error should be displayed"
         );
@@ -76,7 +76,7 @@ class BladeLinterCommandTest extends TestCase
         );
 
         $this->assertMatchesRegularExpression(
-            "~PHP Parse error:  syntax error, unexpected '\\)' in .*/tests/views/invalid\\.blade\\.php on line 1\n~",
+            "~Parse error:  ?syntax error, unexpected .* in .*/tests/views/invalid\\.blade\\.php on line 1\n~",
             $output,
         );
 
@@ -109,8 +109,8 @@ class BladeLinterCommandTest extends TestCase
             "Validating a valid template should display the validation message"
         );
 
-        $this->assertStringContainsString(
-            "PHP Parse error:  syntax error, unexpected ')' in {$path[1]} on line 1",
+        $this->assertMatchesRegularExpression(
+            "~Parse error:  ?syntax error, unexpected .* in {$path[1]} on line 1~",
             $output,
             "Syntax error should be displayed"
         );

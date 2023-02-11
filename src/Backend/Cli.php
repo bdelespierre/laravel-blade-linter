@@ -39,6 +39,11 @@ final class Cli implements Backend
         return [];
     }
 
+    public static function name(): string
+    {
+        return 'cli';
+    }
+
     private function lint(string $code, ?string &$stdout = "", ?string &$stderr = ""): bool
     {
         $descriptors = [

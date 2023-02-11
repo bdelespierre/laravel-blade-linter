@@ -38,6 +38,7 @@ class BladeLinterCommandTest extends TestCase
     {
         $path = __DIR__ . '/views/valid.blade.php';
         $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
+        $output = trim(Artisan::output());
 
         $this->assertEquals(
             0,
@@ -45,11 +46,15 @@ class BladeLinterCommandTest extends TestCase
             "Validating a valid template should exit with an 'OK' status"
         );
 
-        $this->assertEquals(
+        $this->assertStringContainsString(
             "No syntax errors detected in {$path}",
-            trim(Artisan::output()),
+            $output,
             "Validating a valid template should display the validation message"
         );
+
+        if ($backend !== 'auto') {
+            $this->assertStringContainsString($backend, $output);
+        }
     }
 
     /**
@@ -68,6 +73,31 @@ class BladeLinterCommandTest extends TestCase
 
         $this->assertMatchesRegularExpression(
             "~Parse error:  ?syntax error, unexpected .* in {$path} on line 1~i",
+            trim(Artisan::output()),
+            "Syntax error should be displayed"
+        );
+    }
+
+    /**
+     * @dataProvider backendProvider
+     */
+    public function testInvalidExpressionBladeFilePass(string $backend): void
+    {
+        $path = __DIR__ . '/views/invalid-expression.blade.php';
+        $exit = Artisan::call('blade:lint', ['-v' => true, '--backend' => $backend, 'path' => $path]);
+
+        if ($backend !== 'cli') {
+            $this->markTestSkipped('This currently is an E_COMPILE_ERROR in PHP and not a parse error');
+        }
+
+        $this->assertEquals(
+            1,
+            $exit,
+            "Validating an invalid template should exit with a 'NOK' status"
+        );
+
+        $this->assertMatchesRegularExpression(
+            "~Fatal error: Cannot use isset\(\) on the result of an expression .* in {$path} on line \d+~i",
             trim(Artisan::output()),
             "Syntax error should be displayed"
         );

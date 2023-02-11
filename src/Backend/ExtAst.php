@@ -35,4 +35,9 @@ final class ExtAst implements Backend
 
         return [];
     }
+
+    public static function name(): string
+    {
+        return 'ext-ast';
+    }
 }

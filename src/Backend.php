@@ -11,4 +11,6 @@ interface Backend
      * @return list<ErrorRecord>
      */
     public function analyze(\SplFileInfo $file, string $code): array;
+
+    public static function name(): string;
 }

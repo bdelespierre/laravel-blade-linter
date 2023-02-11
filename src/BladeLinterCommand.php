@@ -7,11 +7,13 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
+use PhpParser\ParserFactory;
 
 final class BladeLinterCommand extends Command
 {
     protected $signature = 'blade:lint'
         . ' {--backend=auto : One of: auto, cli, ext-ast}'
+        . ' {--fast}'
         . ' {path?*}';
 
     protected $description = 'Checks Blade template syntax';
@@ -74,18 +76,38 @@ final class BladeLinterCommand extends Command
 
         switch ($this->option('backend')) {
             default:
+                // fallthrough
+
             case 'auto':
+                $fast = (bool) $this->option('fast');
+                if ($fast && extension_loaded('ast')) {
+                    goto ext_ast;
+                } elseif ($fast && class_exists(ParserFactory::class)) {
+                    goto php_parser;
+                }
+                goto cli;
+                break;
+
             case 'cli':
+                cli:
                 $backends[] = new Backend\Cli();
                 break;
 
             case 'ext-ast':
+                ext_ast:
                 $backends[] = new Backend\ExtAst();
                 break;
 
             case 'php-parser':
+                php_parser:
                 $backends[] = new Backend\PhpParser();
                 break;
+        }
+
+        if ($this->getOutput()->isVerbose()) {
+            foreach ($backends as $backend) {
+                $this->info('blade-lint: Using backend: ' . $backend->name());
+            }
         }
 
         $errors = [];

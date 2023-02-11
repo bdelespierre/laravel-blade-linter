@@ -32,4 +32,9 @@ final class PhpParser implements Backend
 
         return [];
     }
+
+    public static function name(): string
+    {
+        return 'php-parser';
+    }
 }

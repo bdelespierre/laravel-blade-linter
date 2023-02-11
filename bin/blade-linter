@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\Facade;
 use Illuminate\View\ViewServiceProvider;
 use Symfony\Component\Console\Application;
 
-// create an empty container
-$laravel = new Container();
-
-$laravel['config'] = fn() => new Config([
+// create an empty application
+$app = new \Illuminate\Foundation\Application();
+$app['config'] = fn() => new Config([
     // use current directory as view path
     'view.paths' => getcwd(),
 
@@ -23,15 +22,15 @@ $laravel['config'] = fn() => new Config([
 ]);
 
 // register services
-(new FilesystemServiceProvider($laravel))->register();
-(new ViewServiceProvider($laravel))->register();
+(new FilesystemServiceProvider($app))->register();
+(new ViewServiceProvider($app))->register();
 
 // set the container so the Config::get calls resolve
-Facade::setFacadeApplication($laravel);
+Facade::setFacadeApplication($app);
 
 // prepare the command
 $command = new BladeLinterCommand();
-$command->setLaravel($laravel);
+$command->setLaravel($app);
 $command->setName('lint');
 
 // create the Symfony console application

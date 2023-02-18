@@ -22,9 +22,11 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^9.0"
+        "illuminate/support": "^9.0 || ^10.0"
     },
     "require-dev": {
+        "drupol/composer-plugin-nixify": "dev-main",
+        "laravel/framework": "^9.0 || ^10.0",
         "nikic/php-parser": "^4.15",
         "nunomaduro/larastan": "^2.0",
         "orchestra/testbench": "^7.22.0",
@@ -49,7 +51,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "drupol/composer-plugin-nixify": true
+        }
     },
     "extra": {
         "laravel": {

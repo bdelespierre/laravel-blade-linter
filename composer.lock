@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1539887d3e9aaaf8a02913f59d34994",
+    "content-hash": "d084dc6b986acc7d88cd0f19ab35831c",
     "packages": [
         {
             "name": "brick/math",
@@ -4778,6 +4778,49 @@
             "time": "2022-12-30T00:15:36+00:00"
         },
         {
+            "name": "drupol/composer-plugin-nixify",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drupol/composer-plugin-nixify.git",
+                "reference": "fd8faf5b898f5366c9d107eb407360b41a477b8f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drupol/composer-plugin-nixify/zipball/fd8faf5b898f5366c9d107eb407360b41a477b8f",
+                "reference": "fd8faf5b898f5366c9d107eb407360b41a477b8f",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2"
+            },
+            "require-dev": {
+                "composer/composer": "^2",
+                "drupol/php-conventions": "^5.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Nixify\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nixify\\": "./src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin to help with Nix packaging, temporary fork of stephank/composer-plugin-nixify",
+            "homepage": "https://github.com/stephank/composer-plugin-nixify",
+            "support": {
+                "source": "https://github.com/drupol/composer-plugin-nixify/tree/main"
+            },
+            "time": "2022-12-26T21:02:45+00:00"
+        },
+        {
             "name": "fakerphp/faker",
             "version": "v1.21.0",
             "source": {
@@ -8197,7 +8240,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "drupol/composer-plugin-nixify": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

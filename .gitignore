@@ -2,9 +2,8 @@
 .idea
 .pre-commit-config.yaml
 build
-composer.lock
-docs
 vendor
 coverage
 .phpunit.result.cache
 *.phar
+result*

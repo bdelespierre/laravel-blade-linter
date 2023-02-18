@@ -5,17 +5,18 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Bdelespierre\LaravelBladeLinter\BladeLinterCommand;
 use Illuminate\Config\Repository as Config;
-use Illuminate\Container\Container;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\View\ViewServiceProvider;
 use Symfony\Component\Console\Application;
 
 // create an empty application
-$app = new \Illuminate\Foundation\Application();
+$basePath = '.';
+$app = new \Illuminate\Foundation\Application($basePath);
+$app->useAppPath($basePath);
 $app['config'] = fn() => new Config([
     // use current directory as view path
-    'view.paths' => getcwd(),
+    'view.paths' => [ $basePath ],
 
     // send compiled views to /tmp
     'view.compiled' => sys_get_temp_dir(),

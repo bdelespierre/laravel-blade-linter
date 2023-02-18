@@ -24,6 +24,7 @@ final class BladeLinterCommand extends Command
         $backends = $this->prepareBackends();
         $codeclimate = $this->getCodeClimateOutput();
         $allErrors = [];
+        $nScanned = 0;
 
         if ($this->getOutput()->isVerbose()) {
             $this->info('blade-lint: Using backends: ' . join(', ', array_map(fn (Backend $backend) => $backend->name(), $backends)));
@@ -41,6 +42,7 @@ final class BladeLinterCommand extends Command
             }
 
             $allErrors += $errors;
+            $nScanned++;
         }
 
         if ($codeclimate !== null) {
@@ -63,6 +65,8 @@ final class BladeLinterCommand extends Command
                 JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR
             ));
         }
+
+        $this->info('blade-lint: scanned: ' . $nScanned . ' files');
 
         return $status ?? self::SUCCESS;
     }

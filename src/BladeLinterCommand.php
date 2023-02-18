@@ -12,7 +12,7 @@ use PhpParser\ParserFactory;
 final class BladeLinterCommand extends Command
 {
     protected $signature = 'blade:lint'
-        . ' {--backend=auto : One of: auto, cli, eval, ext-ast, php-parser}'
+        . ' {--backend=*auto : Any of: auto, cli, eval, ext-ast, php-parser}'
         . ' {--fast}'
         . ' {--codeclimate=false : One of: stdout, stderr, false, or a FILE to open}'
         . ' {path?*}';
@@ -21,11 +21,16 @@ final class BladeLinterCommand extends Command
 
     public function handle(): int
     {
+        $backends = $this->prepareBackends();
         $codeclimate = $this->getCodeClimateOutput();
         $allErrors = [];
 
+        if ($this->getOutput()->isVerbose()) {
+            $this->info('blade-lint: Using backends: ' . join(', ', array_map(fn (Backend $backend) => $backend->name(), $backends)));
+        }
+
         foreach ($this->getBladeFiles() as $file) {
-            $errors = $this->checkFile($file);
+            $errors = $this->checkFile($file, ...$backends);
             if (count($errors) > 0) {
                 $status = self::FAILURE;
                 foreach ($errors as $error) {
@@ -85,10 +90,9 @@ final class BladeLinterCommand extends Command
     }
 
     /**
-     * @param \SplFileInfo $file
      * @return list<ErrorRecord>
      */
-    private function checkFile(\SplFileInfo $file): array
+    private function checkFile(\SplFileInfo $file, Backend ...$backends): array
     {
         $code = file_get_contents($file->getPathname());
 
@@ -99,55 +103,50 @@ final class BladeLinterCommand extends Command
         // compile the file and send it to the linter process
         $compiled = Blade::compileString($code);
 
-        $backends = [];
-
-        switch ($this->option('backend')) {
-            default:
-                // fallthrough
-
-            case 'auto':
-                $fast = (bool) $this->option('fast');
-                if ($fast && extension_loaded('ast')) {
-                    goto ext_ast;
-                } elseif ($fast && class_exists(ParserFactory::class)) {
-                    goto php_parser;
-                }
-                goto cli;
-                break;
-
-            case 'cli':
-                cli:
-                $backends[] = new Backend\Cli();
-                break;
-
-            case 'eval':
-                $backends[] = new Backend\Evaluate();
-                break;
-
-            case 'ext-ast':
-                ext_ast:
-                $backends[] = new Backend\ExtAst();
-                break;
-
-            case 'php-parser':
-                php_parser:
-                $backends[] = new Backend\PhpParser();
-                break;
-        }
-
-        if ($this->getOutput()->isVerbose()) {
-            foreach ($backends as $backend) {
-                $this->info('blade-lint: Using backend: ' . $backend->name());
-            }
-        }
-
         $errors = [];
 
         foreach ($backends as $backend) {
-            $errors += $backend->analyze($file, $compiled);
+            $errors = array_merge(
+                $errors,
+                $backend->analyze($file, $compiled)
+            );
         }
 
         return $errors;
+    }
+
+    /**
+     * @return Backend[]
+     */
+    private function prepareBackends(): array
+    {
+        return array_map(function ($backendSpec) {
+            switch ($backendSpec) {
+                default: // case 'auto':
+                    $fast = (bool)$this->option('fast');
+                    if ($fast && extension_loaded('ast')) {
+                        goto ext_ast;
+                    } elseif ($fast && class_exists(ParserFactory::class)) {
+                        goto php_parser;
+                    }
+                    goto cli;
+
+                case 'cli':
+                    cli:
+                    return new Backend\Cli();
+
+                case 'eval':
+                    return new Backend\Evaluate();
+
+                case 'ext-ast':
+                    ext_ast:
+                    return new Backend\ExtAst();
+
+                case 'php-parser':
+                    php_parser:
+                    return new Backend\PhpParser();
+            }
+        }, (array) $this->option('backend'));
     }
 
     /**

@@ -20,7 +20,7 @@
         "illuminate/support": "^9.0"
     },
     "require-dev": {
-        "nikic/php-parser": "*",
+        "nikic/php-parser": "^4.15",
         "nunomaduro/larastan": "^2.0",
         "orchestra/testbench": "^7.22.0",
         "phpstan/phpstan": "^1.9",

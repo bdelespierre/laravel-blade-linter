@@ -51,7 +51,8 @@
           actionlint.enable = true;
           alejandra.enable = true;
           alejandra.excludes = ["\/vendor\/"];
-          phpcs.enable = true;
+          markdownlint.enable = true;
+          #phpcs.enable = true;
           shellcheck.enable = true;
         };
       };

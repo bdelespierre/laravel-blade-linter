@@ -1,18 +1,23 @@
 {
-    "name": "bdelespierre/laravel-blade-linter",
+    "name": "jbboehr/laravel-blade-linter",
     "description": "A simple Blade template syntax checker for Laravel",
     "keywords": [
-        "bdelespierre",
-        "laravel-blade-linter"
+        "laravel-blade-linter",
+        "laravel",
+        "blade",
+        "linter"
     ],
-    "homepage": "https://github.com/bdelespierre/laravel-blade-linter",
+    "homepage": "https://github.com/jbboehr/laravel-blade-linter",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
+            "name": "John Boehr",
+            "email": "jbboehr@gmail.com"
+        },
+        {
             "name": "Benjamin Delespierre",
-            "email": "benjamin.delespierre@gmail.com",
-            "role": "Developer"
+            "email": "benjamin.delespierre@gmail.com"
         }
     ],
     "require": {
@@ -44,10 +49,7 @@
         }
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "drupol/composer-plugin-nixify": true
-        }
+        "sort-packages": true
     },
     "extra": {
         "laravel": {

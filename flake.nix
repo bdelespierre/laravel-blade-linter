@@ -56,6 +56,11 @@
         };
       };
     in rec {
+      packages = {
+        # something isn't working
+        # default = (pkgs.callPackage ./composer-project.nix { inherit php; }) src;
+      };
+
       checks = {
         inherit pre-commit-check;
       };

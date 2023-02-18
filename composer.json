@@ -43,7 +43,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "drupol/composer-plugin-nixify": true
+        }
     },
     "extra": {
         "laravel": {

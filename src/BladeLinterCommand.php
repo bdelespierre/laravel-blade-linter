@@ -41,7 +41,7 @@ final class BladeLinterCommand extends Command
                 $this->line("No syntax errors detected in {$file->getPathname()}");
             }
 
-            $allErrors += $errors;
+            $allErrors = array_merge($allErrors, $errors);
             $nScanned++;
         }
 
@@ -52,6 +52,7 @@ final class BladeLinterCommand extends Command
                         'type' => 'issue',
                         'check_name' => 'Laravel Blade Lint',
                         'description' => $error->message,
+                        'fingerprint' => md5(join("|", [$error->message, $error->path, $error->line])),
                         'categories' => ['Bug Risk'],
                         'location' => [
                             'path' => $error->path,

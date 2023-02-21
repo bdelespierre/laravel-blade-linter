@@ -46,9 +46,11 @@
     "autoload": {
         "psr-4": {
             "Bdelespierre\\LaravelBladeLinter\\": "src",
-            "Bdelespierre\\LaravelBladeLinter\\FakeApp\\": ".",
-            "Tests\\": "tests/"
+            "Bdelespierre\\LaravelBladeLinter\\FakeApp\\": "."
         }
+    },
+    "autoload-dev": {
+        "Tests\\": "tests/"
     },
     "config": {
         "sort-packages": true,
@@ -64,6 +66,10 @@
             "aliases": {
                 "LaravelBladeLinter": "Bdelespierre\\LaravelBladeLinter\\BladeLinterFacade"
             }
+        },
+        "branch-alias": {
+            "dev-master": "1.0.x-dev",
+            "dev-develop": "1.0.x-dev"
         }
     },
     "scripts": {

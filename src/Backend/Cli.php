@@ -8,7 +8,7 @@ use Bdelespierre\LaravelBladeLinter\ErrorRecord;
 
 final class Cli implements Backend
 {
-    private const REGEX = '/Standard input code on line (\d+)[\s\r\n]*/';
+    private const REGEX = '/ in Standard input code on line (\d+)[\s\r\n]*/';
 
     /**
      * @param \SplFileInfo $file
@@ -29,7 +29,7 @@ final class Cli implements Backend
 
             return [
                 new ErrorRecord(
-                    $message,
+                    trim($message),
                     $file->getPathname(),
                     $line
                 ),

@@ -141,12 +141,12 @@ with lib; let
                     "id": -1
                 },
                 "type": "cache",
-                "name": "laravel_framework-9.52.0.0",
+                "name": "laravel_framework-9.52.2.0",
                 "urls": [
-                    "https://api.github.com/repos/laravel/framework/zipball/eb85cd9d72e5bfa54b4d0d9040786f26d6184a9e"
+                    "https://api.github.com/repos/laravel/framework/zipball/cf021e5e9edf854f832b191ad5168e9f2327cdf7"
                 ],
-                "cacheFile": "laravel/framework/1faf5ada09af4a224cd81bf4be17966eb133c579.zip",
-                "sha256": "925da285d508e445965000e2be89b0496bae25ead8d23a96eb119c9660024a39"
+                "cacheFile": "laravel/framework/9ce2670b0f73f4556c92a169ae5f229b3759e8c5.zip",
+                "sha256": "86e58192a3e9263ee17bfd493983104edd5a843b3f495b57cad566c5d58fd9c7"
             },
             {
                 "package": {
@@ -189,12 +189,12 @@ with lib; let
                     "id": -1
                 },
                 "type": "cache",
-                "name": "league_flysystem-3.12.2.0",
+                "name": "league_flysystem-3.12.3.0",
                 "urls": [
-                    "https://api.github.com/repos/thephpleague/flysystem/zipball/f6377c709d2275ed6feaf63e44be7a7162b0e77f"
+                    "https://api.github.com/repos/thephpleague/flysystem/zipball/81e87e74dd5213795c7846d65089712d2dda90ce"
                 ],
-                "cacheFile": "league/flysystem/e9a3840718adf9cea0aefabeedff286672a14977.zip",
-                "sha256": "a5de3dfe00551c7e471f2f01a52aa8ce5fe0d91b1456029991c9ca9ad9847839"
+                "cacheFile": "league/flysystem/637be0434068beccc5fea3803be507f6669efd0c.zip",
+                "sha256": "89b675081a416cce3b8cef11c739b5adb12817a751a4a6f51178ae65c3a10cd2"
             },
             {
                 "package": {
@@ -909,36 +909,36 @@ with lib; let
                     "id": -1
                 },
                 "type": "cache",
-                "name": "phpstan_phpstan-1.9.18.0",
+                "name": "phpstan_phpstan-1.10.1.0",
                 "urls": [
-                    "https://api.github.com/repos/phpstan/phpstan/zipball/f2d5cf71be91172a57c649770b73c20ebcffb0bf"
+                    "https://api.github.com/repos/phpstan/phpstan/zipball/1cd5fc530a8b68702f3733ad64294b2a39564198"
                 ],
-                "cacheFile": "phpstan/phpstan/a29ad1dc8ce451d271feb28da5275061ff8e5673.zip",
-                "sha256": "9769ea1e21377d38ab7ad543b8cccd766898c3ad77c3b739c79207a32eced78d"
+                "cacheFile": "phpstan/phpstan/a3ed643467f4d12e3736275eebef649cef3863cd.zip",
+                "sha256": "54a17519ac7293a36677a329bfb17f1947be3113139ffafbc2bab9cc2a8b4089"
             },
             {
                 "package": {
                     "id": -1
                 },
                 "type": "cache",
-                "name": "phpstan_phpstan-phpunit-1.3.4.0",
+                "name": "phpstan_phpstan-phpunit-1.3.7.0",
                 "urls": [
-                    "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/d77af96c1aaec28f7c0293677132eaaad079e01b"
+                    "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/7e43c8f77c7e419730ead01c8dc787c6bcbe0e15"
                 ],
-                "cacheFile": "phpstan/phpstan-phpunit/094e089a621e8a8f735c95f3823e0ca5a1fc0d47.zip",
-                "sha256": "4616659fcef11c89f6c7dfd7011b382624e816ec3287e0213c23cd5c2623af0f"
+                "cacheFile": "phpstan/phpstan-phpunit/5eb71bf0a7ab172e2ed13781935717e1690a6f15.zip",
+                "sha256": "acb248010abf2062d51e59d95626191f28a84f1fde9874cf2262a0fbb80277f3"
             },
             {
                 "package": {
                     "id": -1
                 },
                 "type": "cache",
-                "name": "phpstan_phpstan-strict-rules-1.4.5.0",
+                "name": "phpstan_phpstan-strict-rules-1.5.0.0",
                 "urls": [
-                    "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/361f75b06066f3fdaba87c1f57bdb1ffc28d6f1d"
+                    "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/b7dd96a5503919a43b3cd06a2dced9d4252492f2"
                 ],
-                "cacheFile": "phpstan/phpstan-strict-rules/a61fa77a7a0b3524e0a2ea685491e897818d534b.zip",
-                "sha256": "506bc225e063b457682b0b4742ff5bc0900201702dd963ea731e06b1bd001eea"
+                "cacheFile": "phpstan/phpstan-strict-rules/b359a79af55d45175e241fb34579ed894dd436f7.zip",
+                "sha256": "deb9c3cacc9f4191c277d28d6dfb54f1d925f538e96ddc706194786909b87a8d"
             },
             {
                 "package": {
@@ -1257,12 +1257,12 @@ with lib; let
                     "id": -1
                 },
                 "type": "cache",
-                "name": "spatie_backtrace-1.2.1.0",
+                "name": "spatie_backtrace-1.2.2.0",
                 "urls": [
-                    "https://api.github.com/repos/spatie/backtrace/zipball/4ee7d41aa5268107906ea8a4d9ceccde136dbd5b"
+                    "https://api.github.com/repos/spatie/backtrace/zipball/7b34fee6c1ad45f8ee0498d17cd8ea9a076402c1"
                 ],
-                "cacheFile": "spatie/backtrace/811457da95b29639b118f7546cc4861dff48d711.zip",
-                "sha256": "2b14ae9b84c591f84793567ca36ea8aa971ea7ef1c7172382d8d6e1a66c46d3e"
+                "cacheFile": "spatie/backtrace/360e461355a72056751c6d83b161c315bfd6b7ad.zip",
+                "sha256": "827a2a12b47298746fc47b9b0408fd942aa12b3e64235d854c130a81b3865065"
             },
             {
                 "package": {

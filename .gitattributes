@@ -2,10 +2,7 @@
 # https://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
 
 # Ignore all test and documentation with "export-ignore".
-/.github            export-ignore
-/.codeclimate.json  export-ignore
 /.editorconfig      export-ignore
-/.envrc             export-ignore
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
 #/.phpcs.xml.dist    export-ignore

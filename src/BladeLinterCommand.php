@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bdelespierre\LaravelBladeLinter;
@@ -128,7 +129,7 @@ final class BladeLinterCommand extends Command
         return array_map(function ($backendSpec) {
             switch ($backendSpec) {
                 default: // case 'auto':
-                    $fast = (bool)$this->option('fast');
+                    $fast = $this->option('fast');
                     if ($fast && extension_loaded('ast')) {
                         goto ext_ast;
                     } elseif ($fast && class_exists(ParserFactory::class)) {
@@ -151,6 +152,7 @@ final class BladeLinterCommand extends Command
                     php_parser:
                     return new Backend\PhpParser();
             }
+            /** @phpstan-ignore-next-line */
         }, (array) $this->option('backend'));
     }
 
@@ -160,9 +162,12 @@ final class BladeLinterCommand extends Command
     private function getCodeClimateOutput(): mixed
     {
         $codeclimate = $this->option('codeclimate') ?: 'stderr';
+
+        /** @phpstan-ignore-next-line */
         if ($codeclimate === true || is_array($codeclimate)) {
             $codeclimate = 'stderr';
         }
+
         return match ($codeclimate) {
             'false' => null,
             'stderr' => STDERR,

@@ -1,7 +1,0 @@
-.*
-Dockerfile
-flake.*
-*.md
-*.dist
-tests
-vendor

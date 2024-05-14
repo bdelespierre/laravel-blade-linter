@@ -13,7 +13,7 @@ Performs syntax-checks of your Blade templates. Just that.
 You can install the package via composer:
 
 ```bash
-composer require --dev jbboehr/laravel-blade-linter
+composer require --dev bdelespierre/laravel-blade-linter
 ```
 
 ## Usage

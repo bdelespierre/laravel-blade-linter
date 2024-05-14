@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Bdelespierre\LaravelBladeLinter\Backend;
@@ -17,14 +18,15 @@ final class Cli implements Backend
      */
     public function analyze(\SplFileInfo $file, string $code): array
     {
+        $output = '';
         $message = '';
         $result = $this->lint($code, $output, $message);
 
-        if (! $result) {
+        if (!$result) {
             $line = null;
             if (false !== preg_match(self::REGEX, trim($message), $matches)) {
                 $line = isset($matches[1]) ? (int) $matches[1] : null;
-                $message = preg_replace(self::REGEX, '', $message);
+                $message = preg_replace(self::REGEX, '', $message) ?? '';
             }
 
             return [
@@ -44,7 +46,7 @@ final class Cli implements Backend
         return 'cli';
     }
 
-    private function lint(string $code, ?string &$stdout = "", ?string &$stderr = ""): bool
+    private function lint(string $code, string &$stdout = "", string &$stderr = ""): bool
     {
         $descriptors = [
             0 => ["pipe", "r"], // read from stdin
@@ -55,17 +57,17 @@ final class Cli implements Backend
         // open linter process (php -l)
         $process = proc_open('php -d display_errors=stderr -l', $descriptors, $pipes);
 
-        if (! is_resource($process)) {
+        if (!is_resource($process)) {
             throw new \RuntimeException("unable to open process 'php -l'");
         }
 
         fwrite($pipes[0], $code);
         fclose($pipes[0]);
 
-        $stdout = stream_get_contents($pipes[1]);
+        $stdout = stream_get_contents($pipes[1]) ?: '';
         fclose($pipes[1]);
 
-        $stderr = stream_get_contents($pipes[2]);
+        $stderr = stream_get_contents($pipes[2]) ?: '';
         fclose($pipes[2]);
 
         // it is important that you close any pipes before calling
